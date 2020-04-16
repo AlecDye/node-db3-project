@@ -46,8 +46,14 @@ function addStep(stepData) {
     });
 }
 
-function update(id, changes) {
-  return db("schemes").where({ id }).update(changes);
+// success
+function update(changes, id) {
+  return db("schemes")
+    .where({ id })
+    .update(changes)
+    .then(() => {
+      return findById(id);
+    });
 }
 
 // success
