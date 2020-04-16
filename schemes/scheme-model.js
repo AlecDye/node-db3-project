@@ -20,13 +20,12 @@ function findById(id) {
   return db("schemes").where({ id }).first();
 }
 
-// steps are another table inside schemes db
+// success
 function findSteps(id) {
   return db
     .select("*")
     .from("schemes")
-    .join("steps", "scheme.id", "steps.scheme.id")
-    .where("schemes.id", id);
+    .join("steps", "schemes.id", "=", "steps.scheme_id");
 }
 
 // success
@@ -38,15 +37,17 @@ function add(schemeData) {
     });
 }
 
-function addStep() {}
+function addStep(stepData) {
+  return db("steps")
+    .insert(stepData, "id")
+    .then((ids) => {
+      const [id] = ids;
+      return findSteps(id);
+    });
+}
 
 function update(id, changes) {
-  return db("schemes")
-    .where({ id })
-    .update(changes)
-    .then(() => {
-      return findById(id);
-    });
+  return db("schemes").where({ id }).update(changes);
 }
 
 // success
