@@ -21,10 +21,17 @@ function findById(id) {
 }
 
 // steps are another table inside schemes db
-function findSteps() {}
+function findSteps(id) {
+  return db
+    .select("*")
+    .from("schemes")
+    .join("steps", "scheme.id", "steps.scheme.id")
+    .where("schemes.id", id);
+}
 
-function add() {
-  return db("scheme")
+// success
+function add(schemeData) {
+  return db("schemes")
     .insert(schemeData, "id")
     .then(([id]) => {
       return findById(id);
@@ -42,6 +49,7 @@ function update(id, changes) {
     });
 }
 
-function remove() {
+// success
+function remove(id) {
   return db("schemes").where({ id }).del();
 }
