@@ -10,12 +10,38 @@ module.exports = {
   remove,
 };
 
-function find() {}
+// success
+function find() {
+  return db("schemes");
+}
 
-function findById() {}
+// success
+function findById(id) {
+  return db("schemes").where({ id }).first();
+}
 
+// steps are another table inside schemes db
 function findSteps() {}
 
-function add() {}
+function add() {
+  return db("scheme")
+    .insert(schemeData, "id")
+    .then(([id]) => {
+      return findById(id);
+    });
+}
 
-function remove() {}
+function addStep() {}
+
+function update(id, changes) {
+  return db("schemes")
+    .where({ id })
+    .update(changes)
+    .then(() => {
+      return findById(id);
+    });
+}
+
+function remove() {
+  return db("schemes").where({ id }).del();
+}
